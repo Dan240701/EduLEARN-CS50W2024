@@ -1,0 +1,72 @@
+{% extends "educaWeb/layout.html" %}
+{% load static %} 
+
+
+{% block body %}
+<section class="hero">
+    <div class="">
+        <div class="row align-items-center">
+            <div class="col-md-8 hero-image">
+                <img src= "{% static 'educaWeb/images/portada1.jpg' %}" alt="Hero Image" class="img-fluid">
+            </div>
+
+            <div class="col-md-4 hero-content" style="display: flex; justify-content: center; align-items: center; flex-direction: column; ">
+                <h1>DuLEARN</h1>
+                <p>Lorem ipsum dolor sit</p>
+                <button>Ver Cursos</button>
+            </div>
+          
+        </div>
+    </div>
+</section>
+<hr>
+
+<section class="purpose">
+    <h2>Nuestro Propósito</h2>
+    <div class="container wrapper">
+        <div class="row">
+            <div class="col-md-4 purpose-item">
+                <img src="{% static 'educaWeb/images/icon1.png' %}" alt="Icon 1" class="img-fluid">
+                <p>Lorem ipsum dolor sit</p>
+            </div>
+            <div class="col-md-4 purpose-item">
+                <img src="{% static 'educaWeb/images/icon2.png' %}" alt="Icon 2" class="img-fluid">
+                <p>Lorem ipsum dolor sit</p>
+            </div>
+            <div class="col-md-4 purpose-item">
+                <img src="{% static 'educaWeb/images/icon3.png' %}" alt="Icon 3" class="img-fluid">
+                <p>Lorem ipsum dolor sit</p>
+            </div>
+        </div>
+    </div>
+</section>
+<hr>
+
+<!--Area de Categorias-->
+
+<section class="study-areas">
+    <div class="container">
+        <h2>Cubrimos diferentes áreas de estudio</h2>
+        <p>Lorem ipsum dolor sit amet consectetur. At sociis nullam nibh arcu lacus dui nascetur mattis dui ultrices porttitor. Metus nec eros facilisi ut et est.</p>
+        <div class="row">
+            <div class="col-md-3 study-area-item">
+                <img src="{% static 'educaWeb/images/icon1.png' %}" alt="Icon 4" class="img-fluid">
+                <p>Lorem ipsum dolor sit</p>
+            </div>
+            <div class="col-md-3 study-area-item">
+                <img src="{% static 'educaWeb/images/icon1.png' %}" alt="Icon 5" class="img-fluid">
+                <p>Lorem ipsum dolor sit</p>
+            </div>
+            <div class="col-md-3 study-area-item">
+                <img src="{% static 'educaWeb/images/icon1.png' %}" alt="Icon 6" class="img-fluid">
+                <p>Lorem ipsum dolor sit</p>
+            </div>
+            <div class="col-md-3 study-area-item">
+                <img src="{% static 'educaWeb/images/icon1.png' %}" alt="Icon 7" class="img-fluid">
+                <p>Lorem ipsum dolor sit</p>
+            </div>
+        </div>
+    </div>
+</section>
+<hr>
+{% endblock %}

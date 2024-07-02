@@ -1,0 +1,289 @@
+/*Estilos principales*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hero {
+    font-size: xx-large;
+    font-weight: bold;
+    align-items: center;
+    padding: 40px 20px;
+    background-color: #f1f1f1;
+}
+
+.hero-content {
+    padding: 20px;
+}
+
+.hero h1 {
+    font-size: 36px;
+    margin: 0 0 10px;
+}
+
+.hero p {
+    margin: 0 0 20px;
+}
+
+.hero button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(174, 214, 241);
+}
+
+.purpose {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.purpose h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+
+
+.purpose-item {
+    background-color: #e0e7ff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 150px;
+}
+
+.purpose-item img {
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.study-areas {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.study-areas h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.study-areas p {
+    margin-bottom: 20px;
+}
+
+
+.study-area-item {
+    background-color: #e0e7ff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 150px;
+}
+
+.study-area-item img {
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.row{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 30px 15px;
+    margin: 15px 10px;
+}
+
+/* Estilos de mi layour */
+.container-fluid .navbarElements {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-fluid .icon svg {
+    width: 32px;
+    height: 32px;
+    margin-left: 1rem;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    text-align: center;
+    color: #fff;
+}
+
+
+
+/*Estilos de la seccion de cursos*/
+
+.container-courses {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.main-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.line {
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    height: 2px;
+    background-color: black;
+    opacity: 0.2;
+    margin: 20px auto;
+}
+
+.cards{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.card {
+    width: 300px;
+    padding: 20px;
+    background:linear-gradient(180deg, #8b5cf6, #3b82f6); /* URL de la imagen de fondo */
+    background-size: cover;
+    background-blend-mode: overlay; 
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    outline: none;
+    cursor: pointer;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    outline: none;
+    cursor: pointer;
+}
+
+.card-status {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.card-level {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.card-button {
+    display: inline-block;
+    background-color: #22d3ee;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.card-button:hover {
+    background-color: #0bc0e0;
+}
+
+.card-date {
+    font-size: 1rem;
+}
+
+.card:hover,
+.card:focus {
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-spacing{
+    margin-right: 35px; 
+}
+
+/*Estilos de la seccion de nav*/
+.main-nav{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    margin-bottom: 1r
+}
+.users-nav {
+    border-bottom: 0.5px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+   margin-bottom: 1rem;
+}
+.pnv {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 0;
+    
+}
+
+.n-elm{
+    display: flex;
+    justify-self: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+.bg-light{
+    background-color: #fefefe !important;
+}
+
+/* Estilos para la barra de navegación del usuario */
+.user-navbar-nav-list {
+    justify-content: space-around; /* Distribuye los elementos uniformemente */
+}
+
+.user-nav-item {
+    margin-right: 20px; /* Añade un margen a la derecha de cada elemento */
+}
+/* Media query para pantallas de 380px a 860px de ancho */
+@media (min-width: 360px) and (max-width: 860px) {
+    .user-navbar-nav-list {
+        margin-right: 3px; /* Añade un margen a la derecha de la lista de elementos */
+        justify-content: space-between; /* Distribuye los elementos con espacio entre ellos */
+        padding-left: 10px; /* Añade un poco de padding para evitar que los elementos toquen el borde */
+        padding-right: 10px; /* Añade padding a la derecha para equilibrar el espacio */
+    }
+
+    .user-nav-item {
+        margin-right: 0; /* Elimina el margen a la derecha de cada elemento */
+        flex: 1; /* Permite que los elementos se expandan para ocupar el espacio disponible */
+    }
+}

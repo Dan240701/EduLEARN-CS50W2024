@@ -1,0 +1,56 @@
+{% extends "educaWeb/layout.html" %}
+{% load static %} 
+
+
+{% block body %}
+
+<div style="display: flex; justify-content: center;" >
+    <h1 id="titulo-curso"></h1> 
+</div>
+
+<div class="line"></div>
+
+<div class="container-courses">
+    <div class="cards">
+       
+    </div>
+</div>
+
+<div class="container-lectures">
+    <div class="cards-lecciones row row-cols-1 row-cols-md-2 g-4">
+
+    </div>
+</div>
+
+<div class="form-cursos" id="contenidoCurso">
+    <h2>
+        Cree un nuevo curso
+    </h2>
+    <form>
+        <div class="form-group">
+          <label for="nombreCurso">Nombre del Curso</label>
+          <input type="text" class="form-control" id="nombreCurso" placeholder="Ingrese el nombre del curso">
+        </div>
+        <div class="form-group">
+          <label for="nivelCurso">Nivel</label>
+          <input type="text" class="form-control" id="nivelCurso" placeholder="Ingrese el nivel del curso">
+        </div>
+        <div class="form-group">
+          <label for="urlImgCurso">URL de img Portada del Curso</label>
+          <input type="text" class="form-control" id="urlImgCurso" placeholder="Ingrese la URL de la imagen del curso">
+        </div>
+        <div class="form-group">
+            <label for="categoriasCurso">Categorías</label>
+            <select multiple class="form-control" id="categoriasCurso">
+              {% for categoria in categorias %}
+                <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        <input type="hidden" name="usuarioId" id="usuarioCurso" value="{{ request.user.id }}">
+           
+        
+        <button type="submit"  id="btn-save" class="btn btn-primary">Guardar</button>
+      </form>
+</div>
+{% endblock %}
