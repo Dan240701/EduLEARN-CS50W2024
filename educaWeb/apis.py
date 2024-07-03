@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from .serializers import UsuarioSerializer, CursoSerializer, LeccionSerializer, PreferenciasSerializer, ProgresoSerializer, CategoriaSerializer
 from .models import Usuario, Curso, Leccion, Preferencias, Progreso, Categoria
 
@@ -17,6 +17,21 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 class CursoViewSet(viewsets.ModelViewSet):
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
+
+    @action(detail=True, methods=['put'])
+    def actualizar_estado(self, request, pk=None):
+        curso = self.get_object()
+        estado = request.data.get('estado')
+        if estado is not None:
+            curso.estado = estado
+            curso.save()
+            return Response({'status': 'estado actualizado'})
+        else:
+            return Response({'error': 'Estado no proporcionado'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+
 class LeccionViewSet(viewsets.ModelViewSet):
     queryset = Leccion.objects.all()
     serializer_class = LeccionSerializer

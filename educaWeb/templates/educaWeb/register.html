@@ -1,39 +1,49 @@
 {% extends "educaWeb/layout.html" %}
-{% load static %} 
-
+{% load static %}
 
 {% block body %}
+<style>
+.register-background {
+    background: url("{% static 'educaWeb/images/logpexels.jpg' %}") no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+</style>
 
-    <h2>Register</h2>
-
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
-
-    <form action="{% url 'register' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input class="form-control" type="text" name="username" placeholder="Nombre de Usuario">
+    <div class="register-background">
+        <div class="register-container">
+            <h2>Register</h2>
+            {% if message %}
+                <div>{{ message }}</div>
+            {% endif %}
+            <form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input autofocus class="form-control" type="text" name="username" placeholder="Nombre de Usuario">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+                </div>
+                <div class="form-group">
+                    <label for="tipo_usuario" style="margin-bottom: 15px;">Que tipo de usuario eres?</label>
+                    <select class="form-control form-control-select" name="tipo_usuario">
+                        {% for value, label in tipo_usuario %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <input class="btn btn-primary" type="submit" value="Register">
+            </form>
+            <p>Already have an account? <a href="{% url 'login' %}">Log In here.</a></p>
         </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-        </div>
-        <div class="form-group">
-            <label for="tipo_usuario">Que tipo de usuario eres?</label>
-        
-            <select name="tipo_usuario" style="display: block;">
-                {% for value, label in tipo_usuario %}
-                <option value="{{ value }}">{{ label }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <hr>
-        <input class="btn btn-primary" type="submit" value="Register">
-    </form>
-
-    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
-
+    </div>
 {% endblock %}
