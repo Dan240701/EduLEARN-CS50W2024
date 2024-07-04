@@ -29,8 +29,9 @@ class Curso(models.Model):
 class Leccion(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='curso_leccion')
     titulo = models.CharField(max_length=64, null=True, blank=True)
-    descripcion = models.TextField()
+    descripcion = models.TextField(null=True, blank=True)
     completado = models.BooleanField(default=False)
+    estado = models.BooleanField(default=True)
     url_img = models.CharField(max_length=255, null=True, blank=True)
     url_video = models.CharField(max_length=255, null=True, blank=True)
     progreso = models.IntegerField(default=0)

@@ -140,7 +140,7 @@ html,body {
 
 /*Estilos de la seccion de cursos*/
 
-.container-courses {
+.container-courses, .container-lectures{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -172,22 +172,22 @@ html,body {
     justify-content: center;
     gap: 20px;
 }
+.cards-lecciones{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
 
 .card {
     width: 300px;
     padding: 20px;
+    margin: 20px;
     background:linear-gradient(180deg, #8b5cf6, #3b82f6); /* URL de la imagen de fondo */
     background-size: cover;
     background-blend-mode: overlay; 
     color: white;
     font-weight: bold;
-    border-radius: 10px;
-    position: relative;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    outline: none;
-    cursor: pointer;
-    border-radius: 10px;
     position: relative;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
@@ -214,7 +214,7 @@ html,body {
     margin-bottom: 20px;
 }
 
-.card-button {
+.card-button, .card-leccion {
     display: inline-block;
     background-color: #22d3ee;
     color: white;
@@ -240,7 +240,7 @@ html,body {
     transform: scale(1.05);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
 }
-.card-edit-button, .card-delete-button {
+.card-edit-button, .card-delete-button, .card-edit-button-leccion, .card-delete-button-leccion {
     display: inline-block;
     background-color: #4ade80; /* Verde para editar */
     color: white;
@@ -253,16 +253,22 @@ html,body {
     transition: background-color 0.3s;
 }
 
-.card-delete-button {
+.card-delete-button, .card-delete-button-leccion {
     background-color: #f87171; /* Rojo para borrar */
 }
 
-.card-edit-button:hover {
+.card-edit-button:hover, .card-edit-button-leccion:hover {
     background-color: #22c55e;
 }
 
-.card-delete-button:hover {
+.card-delete-button:hover, .card-delete-button-leccion:hover {
     background-color: #ef4444;
+}
+
+.col-card{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
 }
 
 .btn-spacing{
@@ -386,17 +392,44 @@ html,body {
 .register-container a {
     color: #4caf50;
 }
-.footer {
-    margin-top: 20px;
-    font-size: 12px;
-    color: #888888;
-}
 
 /* Estilo para el campo select */
 .register-container .form-control-select {
     height: 45px;
     font-size: 16px;
 }
+
+/*Estilos para mi formulario de creacion*/
+.form-control {
+    justify-content: center;
+    border: 1px solid #ccc; /* Borde sutil */
+    border-radius: 4px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    width: 100%; /* Ancho completo */
+    box-sizing: border-box; /* Incluye padding y border en el ancho total */
+    margin-bottom: 15px; /* Espaciado entre campos */
+  }
+  
+  .form-control:focus {
+    border-color: #007bff; /* Color de borde al enfocar */
+    outline: none; /* Remueve el outline predeterminado */
+  }
+
+  #btn-save {
+    background-color: #007bff; /* Color de fondo */
+    border: none; /* Sin borde */
+    color: white; /* Texto blanco */
+    padding: 10px 20px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor de mano al pasar sobre el botón */
+    display: inline-block; /* Permite definir un ancho */
+    width: 50%; /* Ancho completo */
+  }
+
+    #btn-save:hover {
+        background-color: #0056b3; /* Color de fondo al pasar sobre el botón */
+    }
+
 
 /* Media query para pantallas de 380px a 860px de ancho */
 @media (min-width: 360px) and (max-width: 860px) {
@@ -444,4 +477,10 @@ html,body {
         padding: 8px;
         font-size: 14px;
     }
+    .col-card{
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
 }

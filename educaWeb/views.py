@@ -5,6 +5,8 @@ from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.clickjacking import xframe_options_exempt
+
 
 from .models import Usuario, Curso, Leccion, Preferencias, Progreso, Categoria
 
@@ -13,6 +15,8 @@ from .models import Usuario, Curso, Leccion, Preferencias, Progreso, Categoria
 def index(request):
     return render(request, 'educaWeb/index.html')
 
+
+#LOG VIEWS
 def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -66,12 +70,14 @@ def register(request):
             'tipo_usuario': Usuario.USER_TYPE_CHOICES
         })
 
-
+#@xframe_options_exempt
 #Templates views
 def cursos(request):
     categorias = Categoria.objects.all()
+    cursos = Curso.objects.all()
     context = {
         'categorias': categorias,
+        'cursos': cursos,
     }
     return render(request, 'educaWeb/cursos.html', context)
 

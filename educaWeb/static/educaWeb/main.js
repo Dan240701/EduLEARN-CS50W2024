@@ -1,41 +1,57 @@
+import { getCookie,toggleDisplay, mostrarModalLeccion, SvgIcon } from './functions.js';
+
 document.addEventListener('DOMContentLoaded', function() {
       // Ocultar elementos que no se deben mostrar al inicio
       document.querySelector('.container-lectures').style.display = 'none';
       document.querySelector('.form-cursos').style.display = 'none';
+      document.querySelector('.form-lecciones').style.display = 'none';
       document.querySelector('.container-courses').style.display = 'block';
 
-       // Agregar manejador de eventos al botón de crear curso
-       document.getElementById('crearCurso').addEventListener('click', function() {
-        document.querySelector('.container-courses').style.display = 'none'; 
-        document.querySelector('.form-cursos').style.display = 'block'; 
+      // Delegación de eventos para botones de crear curso, editar y mostrar lecciones
+      document.body.addEventListener('click', function(event) {
+        const target = event.target;
+        if (target.matches('#crearCurso')) {
+            toggleDisplay('.container-courses', 'none');
+            toggleDisplay('.form-cursos', 'block');
+
+        } else if (target.matches('#btn-crear-leccion')) {
+            toggleDisplay('.container-lectures', 'none');
+            toggleDisplay('.form-lecciones', 'block');
+          
+        } else if (target.matches('.card-button')) {
+            const cursoId = target.getAttribute('data-curso-id');
+            toggleDisplay('.container-courses', 'none');
+            toggleDisplay('.container-lectures', 'block');
+            ObtenerLecciones(cursoId);
+        } else if (target.matches('.card-edit-button')) {
+            const cursoId = target.getAttribute('data-curso-id');
+            FillDetailsCurso(cursoId);
+        } else if (target.matches('.card-edit-button-leccion')) {
+            const leccionId = target.getAttribute('data-leccion-id');
+            FillDetailsLeccion(leccionId);
+        }
     });
-    
-      // Aquí puedes añadir el resto de tu lógica de inicialización
+
+  
+      // Agregar evento click al botón de guardar curso
       document.getElementById('btn-save').addEventListener('click', function(event) {
         event.preventDefault();
-        const cursoId = document.querySelector('#cursoId').value; // Asumiendo que existe un input con id="cursoId"
+        const cursoId = document.querySelector('#cursoId').value; 
         crearCurso(event, cursoId);
       });
+
+      // Agregar evento click al botón de crear lección
+      document.getElementById('btn-save-leccion').addEventListener('click', function(event) {
+        event.preventDefault();
+        const leccionId = document.querySelector('#leccionId').value;
+        CrearLeccion(event,leccionId);
+      });
+
 
       ObtenerCursos();
   
 });
 
-
-const getCookie = (name) => {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
 const csrftoken = getCookie('csrftoken');
 
 function ObtenerCursos() {
@@ -100,6 +116,7 @@ function ObtenerCursos() {
                       title: 'Curso desactivado',
                       icon: "success"
                   });
+                  ObtenerCursos();
                 })
                 .catch(error => {
                   console.error('Error:', error);
@@ -113,27 +130,6 @@ function ObtenerCursos() {
             });
           });
         });
-
-        // Agregar evento click a los botones de los cursos
-        document.querySelectorAll('.card-button').forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.preventDefault();
-                const cursoId = this.getAttribute('data-curso-id');
-                contenedorCursos.style.display = 'none'; // Ocultar cursos
-                document.querySelector('.container-lectures').style.display = 'block'; // Mostrar lecciones
-                ObtenerLecciones(cursoId);
-            });
-        });
-
-        // Agregar evento click a los botones de editar curso
-        document.querySelectorAll('.card-edit-button').forEach(button => {
-          button.addEventListener('click', function(event) {
-              event.preventDefault();
-              const cursoId = this.getAttribute('data-curso-id');
-              FillDetailsCurso(cursoId); 
-          });
-      });
-        
 
   }).catch(error => console.error('Error:', error));
 }
@@ -199,6 +195,7 @@ function crearCurso(event, cursoId = null) {
     submitButton.textContent = 'Guardar';
   });
 }
+
 function FillDetailsCurso(cursoId) {
   console.log('cursoId recibido:', cursoId);
   fetch(`/educaWeb/apis/cursos/${cursoId}`) 
@@ -243,87 +240,226 @@ function FillDetailsCurso(cursoId) {
     });
 }
 
-  function ObtenerLecciones(cursoId) {
+function ObtenerLecciones(cursoId) {
+  document.getElementById('titulo-curso').textContent = 'Lecciones';
+  document.getElementById('titulo-curso').insertAdjacentHTML('beforeend', SvgIcon('plus'));
 
-    document.getElementById('titulo-curso').textContent = 'Lecciones';
+  fetch(`/educaWeb/apis/lecciones/por_curso/?curso=${cursoId}`) 
+    .then(response => response.json())
+    .then(lecciones => {
+      const contenedorLecciones = document.querySelector('.cards-lecciones');
+      contenedorLecciones.innerHTML = '';
 
-    fetch(`/educaWeb/apis/lecciones/por_curso/?curso=${cursoId}`) // Asegúrate de que tu API soporte este parámetro
-      .then(response => response.json())
-      .then(lecciones => {
-        const contenedorLecciones = document.querySelector('.cards-lecciones');
-        // Limpiar el contenedor antes de agregar nuevas lecciones
-        contenedorLecciones.innerHTML = '';
+      if (lecciones.length === 0) {
+          contenedorLecciones.innerHTML = '<h2>No hay lecciones disponibles para este curso.</h2>';
+          contenedorLecciones.style.display = 'flex';
+          return; 
+      }
 
-        // Verificar si hay lecciones disponibles
-        if (lecciones.length === 0) {
-            contenedorLecciones.innerHTML = '<h2>No hay lecciones disponibles para este curso.</h2>';
-            contenedorLecciones.style.display = 'flex';
-            contenedorLecciones.style.justifyContent = 'center';
-            contenedorLecciones.style.alignItems = 'center';
-           // Asegurarse de que el mensaje sea visible
-            return; // Salir de la función si no hay lecciones
-        }
-
-        let htmlLecciones = '';
-        lecciones.forEach(leccion => {
-          htmlLecciones += `
-            <div class="col">
-            <div class="card" data-id="${leccion.id}" data-titulo="${leccion.titulo}" data-video-url="${leccion.url_video}" data-descripcion="${leccion.descripcion}">
-              <img src="${leccion.url_img}" class="card-img-top">
-              <div class="card-body">
+      let htmlLecciones = '<div class="col-card">';
+      lecciones.forEach(leccion => {
+        if (leccion.estado) {
+        htmlLecciones += `
+        
+          <div class="col">
+            <div class="card" id="${leccion.id}" data-id="${leccion.id}" data-titulo="${leccion.titulo}" data-curso-id="${leccion.curso}" data-video-url="${leccion.url_video}" data-descripcion="${leccion.descripcion}">
+              <img src="${leccion.url_img}" class="card-img-top" width="198px" height="200px">
+              <div class="card-body"> 
                 <h5 class="card-title">${leccion.titulo}</h5>
-                 <p class="card-text">${leccion.completado ? 'Completado' : 'Sin completar'}</p>
+                <p class="card-text">${leccion.completado ? 'Completado' : 'Sin completar'}</p>
               </div>
+                  <a href="#" class="card-leccion" data-leccion-id="${leccion.id}">Abrir leccion</a>
+                  <div class="card-actions"> 
+                    <a href="#" class="card-edit-button-leccion" data-leccion-id="${leccion.id}">Editar</a>
+                    <a href="#" class="card-delete-button-leccion" data-leccion-id="${leccion.id}">Borrar</a>
+                </div>
             </div>
           </div>
           `;
-        });
-        contenedorLecciones.innerHTML = htmlLecciones;
+      }
+      });
+      htmlLecciones += '</div>';
+      contenedorLecciones.innerHTML = htmlLecciones;
 
-        // Agregar manejadores de eventos de clic a cada tarjeta
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('click', function() {
-            // Recuperar los valores de los data-attributes
-            const leccionId = this.getAttribute('data-id');
-            const titulo = this.getAttribute('data-titulo');
-            const videoUrl = this.getAttribute('data-video-url');
-            const descripcion = this.getAttribute('data-descripcion');
+      //recuperar curso
+      if (lecciones.length > 0) {
+        const cursoId = lecciones[0].curso;
+        document.querySelector('#cursoLeccion').value = cursoId;
+        console.log(cursoId);
+      } else { console.log("No hay lecciones o no se pudo obtener el ID del curso."); }
+
+
+
+      // Evento para abrir el modal con los detalles de la lección
+      document.querySelectorAll('.card-leccion').forEach(card => {
+        card.addEventListener('click', function(event) {
+            event.preventDefault();
+    
+            const leccionId = this.getAttribute('data-leccion-id');
+            const cardParent = document.getElementById(leccionId);
+    
+            const titulo = cardParent.getAttribute('data-titulo');
+            const videoUrl = cardParent.getAttribute('data-video-url');
+            const descripcion = cardParent.getAttribute('data-descripcion');
+    
+            console.log('Mostrar leccion:', leccionId, titulo, videoUrl, descripcion);
             mostrarModalLeccion(leccionId, titulo, videoUrl, descripcion);
         });
+    });
+
+      // Evento para desactivar una lección
+      document.querySelectorAll('.card-delete-button-leccion').forEach(button => {
+          button.addEventListener('click', function(event) {
+              event.preventDefault();
+              const leccionId = this.getAttribute('data-leccion-id');
+              
+              Swal.fire({
+                  title: '¿Estás seguro?',
+                  text: "No podrás revertir esta acción!",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Sí, desactivar!'
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      fetch(`/educaWeb/apis/lecciones/${leccionId}/actualizar_estado/`, { 
+                          method: 'PUT',
+                          headers: {
+                              'Content-Type': 'application/json',
+                              'X-CSRFToken': csrftoken
+                          },
+                          body: JSON.stringify({
+                              estado: false 
+                          })
+                      })
+                      .then(response => {
+                          if (!response.ok) {
+                              throw new Error('Error al desactivar la lección');
+                          }
+                          Swal.fire({
+                              title: 'Lección desactivada',
+                              icon: "success"
+                          });
+                          ObtenerLecciones(cursoId); // Reutiliza cursoId aquí para actualizar la lista de lecciones
+                      })
+                      .catch(error => {
+                          console.error('Error:', error);
+                          Swal.fire({
+                              title: "Error",
+                              text: "No se pudo desactivar la lección.",
+                              icon: "error"
+                          });
+                      });
+                  }
+              });
+          });
       });
-        contenedorLecciones.style.display = 'block'; // Mostrar lecciones
-      })
-      .catch(error => console.error('Error al obtener lecciones:', error));
+      
+      contenedorLecciones.style.display = 'block';
+    })
+    .catch(error => console.error('Error al obtener lecciones:', error));
 }
 
-function mostrarModalLeccion(leccionId, titulo, videoUrl, descripcion) {
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: "btn btn-success btn-spacing",
-          cancelButton: "btn btn-danger",
-          padding: "3 rem",
-        
-        },
-        buttonsStyling: false
-      });
+function CrearLeccion(event, leccionId = null) {
+  event.preventDefault();
+  const submitButton = document.getElementById('btn-save-leccion');
+  submitButton.disabled = true;
+  
+  console.log(leccionId)
 
-      swalWithBootstrapButtons.fire({
-        title: `<h3><strong>${titulo}</strong></h3>`,
-        icon: 'info',
-        html: `
-            <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="${videoUrl}" allowfullscreen></iframe>
-            </div>
-            <hr>
-            <p style='display: flex; justify-content:center;'>${descripcion}</p>
-        `,
-        showCloseButton: true,
-        showCancelButton: true,
-        focusConfirm: false,
-        width: '100rem',
-        confirmButtonText: "Completar lección",
-        cancelButtonText: "Cerrar leccion",
-       
-      });
+  const datosLeccion = {
+    titulo: document.querySelector('#nombreLeccion').value,
+    url_img: document.querySelector('#urlImgLeccion').value,
+    url_video: document.querySelector('#urlVideoLeccion').value,
+    descripcion: document.querySelector('#descripcionLeccion').value,
+    curso: document.querySelector('#cursoLeccion').value
+  };
+
+  const url = leccionId ? `/educaWeb/apis/lecciones/${leccionId}/` : `/educaWeb/apis/lecciones/`;
+  const method = leccionId ? 'PUT' : 'POST';
+  const successMessage = leccionId ? "Lección Actualizada" : "Lección Creada";
+  const errorMessage = leccionId ? "Error al actualizar la lección" : "Error al crear la lección";
+
+  fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken
+    },
+    body: JSON.stringify(datosLeccion)
+  })
+  .then(response => {
+    if (!response.ok) {
+      return response.json().then(err => { throw err });
+    }
+    return response.json();
+  })
+  .then(result => {
+    console.log(result);
+    submitButton.disabled = false;
+    submitButton.textContent = 'Guardar';
+    Swal.fire({
+      title: successMessage,
+      icon: "success"
+    });
+    // Limpiar el formulario
+    document.querySelector('#nombreLeccion').value = '';
+    document.querySelector('#urlImgLeccion').value = '';
+    document.querySelector('#urlVideoLeccion').value = '';
+    document.querySelector('#descripcionLeccion').value = '';
+    // Actualizar la UI según sea necesario
+    // Mostrar el formulario de lecciones y ocultar el formulario de registro
+    document.querySelector('.form-lecciones').style.display = 'block';
+    document.querySelector('.container-lectures').style.display = 'none';
+  })
+  .catch(e => {
+    console.error('Error:', e);
+    Swal.fire({
+      title: errorMessage,
+      text: e.error,
+      icon: "error"
+    });
+    submitButton.disabled = false;
+    submitButton.textContent = 'Guardar';
+  });
 }
 
+function FillDetailsLeccion(leccionId) {
+  // Validate leccionId
+  if (!leccionId) {
+    console.error('Invalid leccionId:', leccionId);
+    return;
+  }
+
+  // Fetch lesson details
+  fetch(`/educaWeb/apis/lecciones/${leccionId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('La respuesta de la red no fue ok');
+      }
+      return response.json();
+    })
+    .then(leccion => {
+      // Update DOM elements
+      document.querySelector('#nombreLeccion').value = leccion.titulo;
+      document.querySelector('#urlImgLeccion').value = leccion.url_img;
+      document.querySelector('#urlVideoLeccion').value = leccion.url_video;
+      document.querySelector('#descripcionLeccion').value = leccion.descripcion;
+      document.querySelector('#leccionId').value = leccionId;
+
+      // Show and hide elements
+      document.querySelector('.form-lecciones').style.display = 'block';
+      document.querySelector('.container-lectures').style.display = 'none';
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo cargar la información de la lección.',
+        icon: 'error',
+        confirmButtonText: 'Cerrar'
+      });
+    });
+}

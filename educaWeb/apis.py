@@ -29,12 +29,20 @@ class CursoViewSet(viewsets.ModelViewSet):
         else:
             return Response({'error': 'Estado no proporcionado'}, status=status.HTTP_400_BAD_REQUEST)
     
-
-
-
 class LeccionViewSet(viewsets.ModelViewSet):
     queryset = Leccion.objects.all()
     serializer_class = LeccionSerializer
+
+    @action(detail=True, methods=['put'])
+    def actualizar_estado(self, request, pk=None):
+        leccion = self.get_object()
+        estado = request.data.get('estado')
+        if estado is not None:
+            leccion.estado = estado
+            leccion.save()
+            return Response({'status': 'estado actualizado'})
+        else:
+            return Response({'error': 'Estado no proporcionado'}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'])
     def por_curso(self, request):
