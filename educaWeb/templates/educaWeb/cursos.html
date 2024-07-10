@@ -1,90 +1,89 @@
 {% extends "educaWeb/layout.html" %}
-{% load static %} 
+{% load static %}
 
 
 {% block body %}
 
-<div style="display: flex; justify-content: center;" >
-    <h1 id="titulo-curso"></h1> 
+<div style="display: flex; justify-content: center;">
+  <h1 id="titulo-curso"></h1>
 </div>
 
 <div class="line"></div>
 
 <div class="container-courses">
-    <div class="cards">
-       
-    </div>
+  <div class="cards">
+
+  </div>
+</div>
+<div class="saved-courses" style="text-align: center;">
+  <div class="cards-y">
+
+  </div>
+</div>
+
+<div class="container-maestros" style="text-align: center;">
+  <div class="cards-x">
+
+  </div>
 </div>
 
 <div class="container-lectures">
-    <div class="cards-lecciones">
+  <div class="cards-lecciones">
 
-    </div>
+  </div>
 </div>
 
 <div class="form-cursos" id="contenidoCurso">
-    <h2>
-        Cree un nuevo curso
-    </h2>
-    <form class="frm-cursos">
-        <div class="form-group">
-          <label for="nombreCurso">Nombre del Curso</label>
-          <input type="text" class="form-control" id="nombreCurso" placeholder="Ingrese el nombre del curso">
-        </div>
-        <div class="form-group">
-          <label for="nivelCurso">Nivel</label>
-          <input type="text" class="form-control" id="nivelCurso" placeholder="Ingrese el nivel del curso">
-        </div>
-        <div class="form-group">
-          <label for="urlImgCurso">URL de img Portada del Curso</label>
-          <input type="text" class="form-control" id="urlImgCurso" placeholder="Ingrese la URL de la imagen del curso">
-        </div>
-        <div class="form-group">
-            <label for="categoriasCurso">Categorías</label>
-            <select multiple class="form-control" id="categoriasCurso">
-              {% for categoria in categorias %}
-                <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
-              {% endfor %}
-            </select>
-          </div>
-        <input type="hidden" id="cursoId" value="">
-        <input type="hidden" name="usuarioId" id="usuarioCurso" value="{{ request.user.id }}">
-           
-        
-        <button type="submit"  id="btn-save" class="btn btn-primary">Guardar</button>
-      </form>
+  <div class="container-form">
+    <h2>Registro de Cursos</h2>
+    <input type="text" placeholder="Ingrese URL de Portada de Curso" id="urlImgCurso">
+    <input type="text" placeholder="Ingrese el Nombre del curso" id="nombreCurso">
+    <input type="text" placeholder="Ingrese el Nivel del Curso" id="nivelCurso">
+
+        <label for="categoriasCurso">Categorias</label>
+        <select multiple class="form-control" id="categoriasCurso">
+          {% for categoria in categorias %}
+          <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+          {% endfor %}
+        </select>
+    <!-- -->
+    <input type="hidden" id="cursoId" value="">
+    <input type="hidden" name="usuarioId" id="usuarioCurso" value="{{ request.user.id }}">
+
+    <button class="btn-form" type="submit" id="btn-save">Registrar Curso</button>
+  </div>
 </div>
 
 <div class="form-lecciones" id="contenidoLeccion">
-  <h2>
-      Cree una nueva lección
-  </h2>
-  <form class="frm-lecciones">
-      <div class="form-group">
-        <label for="nombreLeccion">Nombre de la Lección</label>
-        <input type="text" class="form-control" id="nombreLeccion" placeholder="Ingrese el nombre de la lección">
-      </div>
-       <!--Agregar campo para la imagien url de la leccion-->
-      <div class="form-group">
-        <label for="urlImgLeccion">Url de imagen de portada</label>
-        <input type="text" class="form-control" id="urlImgLeccion" placeholder="Ingrese la URL de la imagen de la lección">
-      </div>
+  <div class="container-form">
+    <h2>Cree una nueva lección</h2>
+    <div class="form-group">
+      <label for="nombreLeccion">Nombre de la Lección</label>
+      <input type="text" class="form-control" id="nombreLeccion" placeholder="Ingrese el nombre de la lección">
+    </div>
+    <!--Agregar campo para la imagien url de la leccion-->
+    <div class="form-group">
+      <label for="urlImgLeccion">Url de imagen de portada</label>
+      <input type="text" class="form-control" id="urlImgLeccion"
+        placeholder="Ingrese la URL de la imagen de la lección">
+    </div>
 
-      <div class="form-group">
-        <label for="descripcionLeccion">Contenido del Curso</label>
-        <textarea class="form-control" id="descripcionLeccion" placeholder="Ingrese la descripción de la lección" rows="3"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="urlVideoLeccion">URL del video de la lección</label>
-        <input type="text" class="form-control" id="urlVideoLeccion" placeholder="Ingrese la URL del video de la lección">
-      </div>
+    <div class="form-group">
+      <label for="descripcionLeccion">Contenido del Curso</label>
+      <textarea class="form-control txt-leccion" id="descripcionLeccion" placeholder="Ingrese la descripción de la lección"
+        rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="urlVideoLeccion">URL del video de la lección</label>
+      <input type="text" class="form-control" id="urlVideoLeccion" placeholder="Ingrese la URL del video de la lección">
+    </div>
 
-      <!-- Campo oculto para el cursoId, asegúrate de establecer el valor correcto aquí -->
-      <input type="hidden" name="cursoId" id="cursoLeccion" value="">
-      <input type="hidden" id="leccionId" value="">
-      <input type="hidden" name="usuarioId" id="usuarioLeccion" value="{{ request.user.id }}">
-      <button type="submit"  id="btn-save-leccion" class="btn btn-primary">Guardar</button>
-    </form>
+    <!-- Campo oculto para el cursoId, asegúrate de establecer el valor correcto aquí -->
+    <input type="hidden" name="cursoId" id="cursoLeccion" value="">
+    <input type="hidden" id="leccionId" value="">
+    <input type="hidden" name="usuarioId" id="usuarioLeccion" value="{{ request.user.id }}">
+    <button type="submit" id="btn-save-leccion" class="btn btn-primary">Guardar</button>
+  </div>
 </div>
 
 {% endblock %}

@@ -8,6 +8,9 @@ class Usuario(AbstractUser):
     ]
     tipo_usuario = models.CharField(max_length=7, choices=USER_TYPE_CHOICES)
 
+    def __str__(self):
+        return self.username + ' - ' + self.tipo_usuario
+
 class Categoria(models.Model):
     nombre = models.CharField(max_length=255)
 
@@ -38,6 +41,15 @@ class Leccion(models.Model):
 
     def __str__(self):
         return f"{self.curso.nombre} - {self.descripcion[:50]}"
+    
+
+class Inscripcion(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='inscripciones')
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='inscritos')
+    fecha_inscripcion = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.username} inscrito en {self.curso.nombre}"
 
 class Progreso(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='progreso_Usuario')

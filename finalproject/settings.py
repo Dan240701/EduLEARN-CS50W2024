@@ -68,6 +68,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'educaWeb.context.add_tipo_usuario_to_context',
+                'educaWeb.context.add_id_usuario_to_context',
             ],
         },
     },

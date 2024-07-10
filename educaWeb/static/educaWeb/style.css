@@ -1,7 +1,7 @@
 /*Estilos principales*/
 html,body {
     height: 100%;
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -109,8 +109,8 @@ html,body {
 
 /* Estilos de mi layout */
 .main-content{
-    min-height: calc(100vh - 60px); /* Ajusta según la altura del footer */
-    padding-bottom: 60px; /* Ajusta el padding según la altura del footer */
+    min-height: calc(100vh - 60px); 
+    padding-bottom: 60px; 
     box-sizing: border-box;
 }
 .container-fluid .navbarElements {
@@ -129,11 +129,11 @@ html,body {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 60px; /* Ajusta según la altura de tu footer */
-    background-color: #000; /* Cambia esto según el estilo de tu footer */
-    color: #fff; /* Cambia esto según el estilo de tu footer */
+    height: 60px; 
+    background-color: #000; 
+    color: #fff; 
     text-align: center;
-    line-height: 30px; /* Ajusta según la altura de tu footer */
+    line-height: 30px; 
 }
 
 
@@ -166,7 +166,7 @@ html,body {
     margin: 20px auto;
 }
 
-.cards{
+.cards, .cards-x, .cards-y{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -183,7 +183,7 @@ html,body {
     width: 300px;
     padding: 20px;
     margin: 20px;
-    background:linear-gradient(180deg, #8b5cf6, #3b82f6); /* URL de la imagen de fondo */
+    background:linear-gradient(180deg, #8b5cf6, #3b82f6); 
     background-size: cover;
     background-blend-mode: overlay; 
     color: white;
@@ -214,7 +214,7 @@ html,body {
     margin-bottom: 20px;
 }
 
-.card-button, .card-leccion {
+.card-button, .card-leccion, .card-inscripcion, .card-remove {
     display: inline-block;
     background-color: #22d3ee;
     color: white;
@@ -226,8 +226,15 @@ html,body {
     cursor: pointer;
     margin-bottom: 20px;
 }
+.card-remove{
+    background-color: #f87171;
+}
 
-.card-button:hover {
+.card-inscripcion{
+    background-color: #014ba0;  
+}
+
+.card-button:hover, .card-leccion:hover, .card-inscripcion:hover , .card-remove:hover{
     background-color: #0bc0e0;
 }
 
@@ -242,7 +249,7 @@ html,body {
 }
 .card-edit-button, .card-delete-button, .card-edit-button-leccion, .card-delete-button-leccion {
     display: inline-block;
-    background-color: #4ade80; /* Verde para editar */
+    background-color: #4ade80; 
     color: white;
     font-size: 1rem;
     padding: 8px 16px;
@@ -254,7 +261,7 @@ html,body {
 }
 
 .card-delete-button, .card-delete-button-leccion {
-    background-color: #f87171; /* Rojo para borrar */
+    background-color: #f87171; 
 }
 
 .card-edit-button:hover, .card-edit-button-leccion:hover {
@@ -267,7 +274,7 @@ html,body {
 
 .col-card{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 20px;
 }
 
@@ -305,11 +312,11 @@ html,body {
 
 /* Estilos para la barra de navegación del usuario */
 .user-navbar-nav-list {
-    justify-content: space-around; /* Distribuye los elementos uniformemente */
+    justify-content: space-around; 
 }
 
 .user-nav-item {
-    margin-right: 20px; /* Añade un margen a la derecha de cada elemento */
+    margin-right: 20px; 
 }
 
 /*Login Styles*/
@@ -323,7 +330,7 @@ html,body {
     width: 100%;
 }
 .login-box {
-    background-color:rgba(255, 255, 255, 0.8); /* Fondo blanco para la caja del login */
+    background-color:rgba(255, 255, 255, 0.8); 
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -348,7 +355,7 @@ html,body {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    background-color: #4caf50; /* Verde */
+    background-color: #4caf50; 
     border-color: #4caf50;
 }
 .login-box .btn-primary:hover {
@@ -360,14 +367,14 @@ html,body {
 
 /*Register*/
 .register-container {
-    background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
+    background-color: rgba(255, 255, 255, 0.8); 
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 400px;
     text-align: center;
-    z-index: 1; /* Asegurar que el contenedor esté sobre otros elementos */
+    z-index: 1; 
 }
 .register-container h2 {
     margin-bottom: 20px;
@@ -383,7 +390,7 @@ html,body {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    background-color: #4caf50; /* Verde */
+    background-color: #4caf50; 
     border-color: #4caf50;
 }
 .register-container .btn-primary:hover {
@@ -393,56 +400,177 @@ html,body {
     color: #4caf50;
 }
 
-/* Estilo para el campo select */
+
 .register-container .form-control-select {
     height: 45px;
     font-size: 16px;
 }
 
-/*Estilos para mi formulario de creacion*/
+
 .form-control {
     justify-content: center;
-    border: 1px solid #ccc; /* Borde sutil */
-    border-radius: 4px; /* Bordes redondeados */
-    padding: 10px; /* Espaciado interno */
-    width: 100%; /* Ancho completo */
-    box-sizing: border-box; /* Incluye padding y border en el ancho total */
-    margin-bottom: 15px; /* Espaciado entre campos */
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    padding: 10px !important; 
+    width: 100% !important; 
+    box-sizing: border-box; 
+    margin-bottom: 15px; 
   }
   
   .form-control:focus {
-    border-color: #007bff; /* Color de borde al enfocar */
-    outline: none; /* Remueve el outline predeterminado */
+    border-color: #007bff; 
+    outline: none; 
   }
 
   #btn-save {
-    background-color: #007bff; /* Color de fondo */
-    border: none; /* Sin borde */
-    color: white; /* Texto blanco */
-    padding: 10px 20px; /* Espaciado interno */
-    border-radius: 5px; /* Bordes redondeados */
-    cursor: pointer; /* Cursor de mano al pasar sobre el botón */
-    display: inline-block; /* Permite definir un ancho */
-    width: 50%; /* Ancho completo */
+    background-color: #007bff; 
+    border: none; 
+    color: white; 
+    padding: 10px 20px;
+    border-radius: 5px; 
+    cursor: pointer; 
+    display: inline-block; 
+    width: 70%;
+    height: auto;
   }
 
     #btn-save:hover {
-        background-color: #0056b3; /* Color de fondo al pasar sobre el botón */
+        background-color: #0056b3; 
+    }
+
+/*Estilos para formulario de cursos*/
+.container-form {
+    width: fit-content;
+    height: fit-content;
+    padding: 4rem;
+    margin: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid !important;
+    grid-gap: 30px;
+    place-items: Center;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 7px 30px 1px rgba(0, 0, 149, 0.68);
+    -moz-box-shadow: 0px 7px 30px 1px rgba(0, 0, 149, 0.68);
+    box-shadow: 0px 7px 30px 1px rgba(0, 0, 149, 0.68);
+}
+ 
+input[type="text"]{
+    padding:10px;
+    border-radius:30px;
+    width:350px;
+    border: 2px solid #9563FF ;
+  }
+  input[type="text"]:focus, #categoriasCurso:focus {
+    border: 2px solid blue; 
+    outline:none
+  }
+  #categoriasCurso{
+    border-radius:10px;
+    padding:10px;
+    border: 2px solid #9563FF ;
+  }
+  
+
+  .btn-form:hover{
+    background: #9563FF;
+    font-weight:bold;
+  }
+  .txt-leccion{
+  width: 350px;
+  height: 200px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+  }
+  #btn-save-leccion{
+    width: 100%;
+  }
+
+
+    .lesson-container {
+        width: 80%;
+        max-width: 1280px;
+        background: white;
+        padding: 2rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .video-wrapper {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; 
+        margin-bottom: 2rem;
+    }
+    
+    .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 54, 123, 0.67);
+    }
+    
+    .video-frame {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 1.5rem;
+    }
+    
+    .lesson-subtitle {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        text-align: center;
+        margin-bottom: 1rem;
+        background: rgba(0, 54, 123, 0.67);
+        width: 100%;
+        padding: 1rem;
+        border-radius: 5px;
+    }
+    
+    .lesson-description {
+        font-size: 1rem;
+        font-weight: 400;
+        color: #1E1E1E;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .lesson-progress {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1E1E1E;
+        text-align: center;
     }
 
 
-/* Media query para pantallas de 380px a 860px de ancho */
+
 @media (min-width: 360px) and (max-width: 860px) {
     .user-navbar-nav-list {
-        margin-right: 3px; /* Añade un margen a la derecha de la lista de elementos */
-        justify-content: space-between; /* Distribuye los elementos con espacio entre ellos */
-        padding-left: 10px; /* Añade un poco de padding para evitar que los elementos toquen el borde */
-        padding-right: 10px; /* Añade padding a la derecha para equilibrar el espacio */
+        margin-right: 3px; 
+        justify-content: space-between; 
+        padding-left: 10px; 
+        padding-right: 10px; 
     }
 
     .user-nav-item {
-        margin-right: 0; /* Elimina el margen a la derecha de cada elemento */
-        flex: 1; /* Permite que los elementos se expandan para ocupar el espacio disponible */
+        margin-right: 0; 
+        flex: 1; 
     }
 
     .login-container {
@@ -483,4 +611,72 @@ html,body {
         gap: 20px;
     }
     
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .lesson-container {
+        width: 95%;
+        padding: 1rem;
+    }
+
+    .lesson-subtitle {
+        font-size: 1.5rem;
+        padding: 0.5rem;
+    }
+
+    .lesson-description {
+        font-size: 0.875rem;
+    }
+
+    .lesson-progress {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .lesson-subtitle {
+        font-size: 1.25rem;
+    }
+
+    .lesson-description {
+        font-size: 0.75rem;
+    }
+
+    .lesson-progress {
+        font-size: 0.875rem;
+    }
+}
+@media (max-width: 768px) {
+    .container-form {
+        padding: 2rem;
+        margin: 1rem;
+        width: 90%;
+    }
+    input[type="text"] {
+        width: 80%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container-form {
+        padding: 1rem;
+        margin: 0.5rem;
+        width: 95%;
+    }
+    input[type="text"] {
+        width: 100%;
+    }
+}
+
+input[type="text"] {
+    padding: 10px;
+    border-radius: 30px;
+    width: 350px;
+    border: 2px solid #9563FF;
+}
+
+input[type="text"]:focus, #categoriasCurso:focus {
+    border: 2px solid blue;
+    outline: none;
 }

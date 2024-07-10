@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario, Curso, Leccion, Preferencias, Progreso, Categoria
+from .models import Usuario, Curso, Leccion, Preferencias, Progreso, Categoria, Inscripcion
 
 # Serializar mis modelos para que puedan ser consumidos por la API
 class UsuarioSerializer(serializers.ModelSerializer):
@@ -25,4 +25,8 @@ class ProgresoSerializer(serializers.ModelSerializer):
 class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categoria
+        fields = '__all__'
+class InscripcionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Inscripcion
         fields = '__all__'

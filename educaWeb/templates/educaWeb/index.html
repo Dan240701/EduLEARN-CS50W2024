@@ -1,69 +1,64 @@
 {% extends "educaWeb/layout.html" %}
-{% load static %} 
-
+{% load static %}
 
 {% block body %}
 <section class="hero">
-    <div class="">
-        <div class="row align-items-center">
-            <div class="col-md-8 hero-image">
-                <img src= "{% static 'educaWeb/images/portada1.jpg' %}" alt="Hero Image" class="img-fluid">
+    <div class="container-fluid p-0">
+        <div class="row align-items-center g-0">
+            <div class="col-12 col-md-6 col-lg-8 hero-image p-0">
+                <img src="{% static 'educaWeb/images/portada1.jpg' %}" alt="Hero Image" class="img-fluid w-100">
             </div>
-
-            <div class="col-md-4 hero-content" style="display: flex; justify-content: center; align-items: center; flex-direction: column; ">
-                <h1>DuLEARN</h1>
-                <p>Lorem ipsum dolor sit</p>
-                <button>Ver Cursos</button>
-            </div>
-          
-        </div>
-    </div>
-</section>
-<hr>
-
-<section class="purpose">
-    <h2>Nuestro Propósito</h2>
-    <div class="container wrapper">
-        <div class="row">
-            <div class="col-md-4 purpose-item">
-                <img src="{% static 'educaWeb/images/icon1.png' %}" alt="Icon 1" class="img-fluid">
-                <p>Lorem ipsum dolor sit</p>
-            </div>
-            <div class="col-md-4 purpose-item">
-                <img src="{% static 'educaWeb/images/icon2.png' %}" alt="Icon 2" class="img-fluid">
-                <p>Lorem ipsum dolor sit</p>
-            </div>
-            <div class="col-md-4 purpose-item">
-                <img src="{% static 'educaWeb/images/icon3.png' %}" alt="Icon 3" class="img-fluid">
-                <p>Lorem ipsum dolor sit</p>
+            <div class="col-12 col-md-6 col-lg-4 hero-content d-flex flex-column justify-content-center align-items-center text-center p-4 bg-light">
+                <h1 class="display-4 mb-3">EduLEARN</h1>
+                <p class="lead mb-4" style="font-family: 'Roboto', sans-serif;">Transformando el aprendizaje en una aventura de descubrimiento y crecimiento, donde cada mente encuentra su máximo potencial.</p>
+                <a href="{% url 'cursos' %}" class="btn btn-primary btn-lg">Ver Cursos</a>
             </div>
         </div>
     </div>
 </section>
 <hr>
 
-<!--Area de Categorias-->
-
-<section class="study-areas">
+<section class="purpose py-5 bg-light">
     <div class="container">
-        <h2>Cubrimos diferentes áreas de estudio</h2>
-        <p>Lorem ipsum dolor sit amet consectetur. At sociis nullam nibh arcu lacus dui nascetur mattis dui ultrices porttitor. Metus nec eros facilisi ut et est.</p>
-        <div class="row">
-            <div class="col-md-3 study-area-item">
-                <img src="{% static 'educaWeb/images/icon1.png' %}" alt="Icon 4" class="img-fluid">
-                <p>Lorem ipsum dolor sit</p>
+        <h2 class="text-center mb-5" style="font-family: 'Montserrat', sans-serif;">Nuestro Propósito</h2>
+        <div class="row gy-4">
+            <div class="col-12 col-md-4 text-center mb-4">
+                <img src="{% static 'educaWeb/images/educacion.png' %}" alt="Icon 1" class="img-fluid mb-3">
+                <p style="font-family: 'Open Sans', sans-serif;">Facilitar el aprendizaje en línea con acceso flexible a cursos variados.</p>
             </div>
-            <div class="col-md-3 study-area-item">
-                <img src="{% static 'educaWeb/images/icon1.png' %}" alt="Icon 5" class="img-fluid">
-                <p>Lorem ipsum dolor sit</p>
+            <div class="col-12 col-md-4 text-center mb-4">
+                <img src="{% static 'educaWeb/images/profesores.png' %}" alt="Icon 2" class="img-fluid mb-3">
+                <p style="font-family: 'Open Sans', sans-serif;">Apoyar a educadores en la creación y gestión eficiente de contenidos educativos.</p>
             </div>
-            <div class="col-md-3 study-area-item">
-                <img src="{% static 'educaWeb/images/icon1.png' %}" alt="Icon 6" class="img-fluid">
-                <p>Lorem ipsum dolor sit</p>
+            <div class="col-12 col-md-4 text-center mb-4">
+                <img src="{% static 'educaWeb/images/conexion.png' %}" alt="Icon 3" class="img-fluid mb-3">
+                <p style="font-family: 'Open Sans', sans-serif;">Fomentar una comunidad educativa colaborativa y dinámica.</p>
             </div>
-            <div class="col-md-3 study-area-item">
-                <img src="{% static 'educaWeb/images/icon1.png' %}" alt="Icon 7" class="img-fluid">
-                <p>Lorem ipsum dolor sit</p>
+        </div>
+    </div>
+</section>
+<hr>
+
+<section class="study-areas py-5">
+    <div class="container">
+        <h2 class="text-center mb-4" style="font-family: 'Montserrat', sans-serif;">Cubrimos diferentes áreas de estudio</h2>
+        <p class="text-center mb-5 mx-auto" style="font-family: 'Open Sans', sans-serif;">Explora nuestro amplio espectro de conocimiento para alcanzar tus metas educativas.</p>
+        <div class="row gy-4">
+            <div class="col-12 col-md-6 col-lg-3 text-center mb-4">
+                <img src="{% static 'educaWeb/images/libro.png' %}" alt="Icon 4" class="img-fluid mb-3">
+                <p style="font-family: 'Open Sans', sans-serif;">Te ofrecemos oportunidades de aprendizaje personalizado y especializado.</p>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 text-center mb-4">
+                <img src="{% static 'educaWeb/images/avance.png' %}" alt="Icon 5" class="img-fluid mb-3">
+                <p style="font-family: 'Open Sans', sans-serif;">Buscamos satisfacer tus intereses y necesidades educativas.</p>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 text-center mb-4">
+                <img src="{% static 'educaWeb/images/conocimiento.png' %}" alt="Icon 6" class="img-fluid mb-3">
+                <p style="font-family: 'Open Sans', sans-serif;">Permitimos compartir tus conocimientos como educador.</p>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 text-center mb-4">
+                <img src="{% static 'educaWeb/images/precio-bajo.png' %}" alt="Icon 7" class="img-fluid mb-3">
+                <p style="font-family: 'Open Sans', sans-serif;">Accesibilidad a todos nuestros cursos de manera gratuita.</p>
             </div>
         </div>
     </div>

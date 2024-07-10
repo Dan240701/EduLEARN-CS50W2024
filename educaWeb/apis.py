@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework import viewsets, status
-from .serializers import UsuarioSerializer, CursoSerializer, LeccionSerializer, PreferenciasSerializer, ProgresoSerializer, CategoriaSerializer
-from .models import Usuario, Curso, Leccion, Preferencias, Progreso, Categoria
+from .serializers import UsuarioSerializer, CursoSerializer, LeccionSerializer, InscripcionSerializer,PreferenciasSerializer, ProgresoSerializer, CategoriaSerializer
+from .models import Usuario, Curso, Leccion, Preferencias, Progreso, Categoria, Inscripcion
 
 
 from rest_framework import viewsets
@@ -28,7 +28,25 @@ class CursoViewSet(viewsets.ModelViewSet):
             return Response({'status': 'estado actualizado'})
         else:
             return Response({'error': 'Estado no proporcionado'}, status=status.HTTP_400_BAD_REQUEST)
-    
+        
+    @action(detail=True, methods=['get'], url_path='dueno')
+    def obtener_usuario(self, request, pk=None):
+        curso = self.get_object()
+        usuario_id = curso.usuario.id
+        return Response({'ownerId': usuario_id})
+              
+    @action(detail=False, methods=['get'], url_path='creador/(?P<usuario_id>[^/.]+)')
+    def cursos_usuario(self, request, usuario_id=None):
+        usuario = get_object_or_404(Usuario, pk=usuario_id)
+        cursos = Curso.objects.filter(usuario=usuario)
+        page = self.paginate_queryset(cursos)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(cursos, many=True)
+        return Response(serializer.data)
+
+
 class LeccionViewSet(viewsets.ModelViewSet):
     queryset = Leccion.objects.all()
     serializer_class = LeccionSerializer
@@ -53,6 +71,19 @@ class LeccionViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         else:
             return Response({'error': 'curso es requerido'}, status=400)
+
+class InscripcionViewSet(viewsets.ModelViewSet):
+    queryset = Inscripcion.objects.all()
+    serializer_class = InscripcionSerializer
+
+    @action(detail=False, methods=['get'], url_path='student_cursos/(?P<usuario_id>[^/.]+)')
+    def cursos_por_usuario(self, request, usuario_id=None):
+        usuario = get_object_or_404(Usuario, pk=usuario_id)
+        inscripciones = Inscripcion.objects.filter(usuario=usuario)
+        cursos = [inscripcion.curso for inscripcion in inscripciones]
+        serializer = CursoSerializer(cursos, many=True)
+        return Response(serializer.data)
+
 
 class PreferenciasViewSet(viewsets.ModelViewSet):
     queryset = Preferencias.objects.all()

@@ -37,14 +37,16 @@ export function mostrarModalLeccion(leccionId, titulo, videoUrl, descripcion) {
       });
 
       swalWithBootstrapButtons.fire({
-        title: `<h3><strong>${titulo}</strong></h3>`,
-        icon: 'info',
         html: `
-            <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="${videoUrl}" allowfullscreen></iframe>
+            <div class="lesson-container">
+             <div class="lesson-subtitle">${titulo}</div>
+            <div class="video-wrapper">
+                <div class="video-overlay"></div>
+                <iframe class="video-frame" src="${videoUrl}" allowfullscreen></iframe>
             </div>
-            <hr>
-            <p style='display: flex; justify-content:center;'>${descripcion}</p>
+            <div class="lesson-progress"> Contenido </div>
+            <div class="lesson-description"> ${descripcion} </div>
+    </div>
         `,
         showCloseButton: true,
         showCancelButton: true,
@@ -57,7 +59,7 @@ export function mostrarModalLeccion(leccionId, titulo, videoUrl, descripcion) {
 }
 
 //Funcion para crear iconos
-export function SvgIcon(type) {
+export function SvgIcon(type, options = {}) {
     switch (type) {
       case 'capslock':
         return `
@@ -73,8 +75,93 @@ export function SvgIcon(type) {
           </svg>
           Agregar</button>
         `;
+        case 'agregar_curso':
+          // Verifica si cursoId está presente en las opciones y lo usa si está disponible
+          const cursoIdAttribute = options.cursoId ? `data-curso-id="${options.cursoId}"` : '';
+          return `
+          <a href="#" class="card-inscripcion" ${cursoIdAttribute}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+            Guardar a mis cursos
+          </a>
+        `;
       default:
         return '';
     }
 }
 
+export function obtenerTipoDeUsuario() {
+  const mainContent = document.querySelector('.container-fluid.main-content');
+  if (mainContent) {
+      return mainContent.getAttribute('data-tipo-usuario');
+  } else {
+      console.log('El elemento .container-fluid.main-content no se encontró.');
+      return null;
+  }
+}
+
+//devolver el id del usuario
+export function obtenerIdUsuario() {
+    const mainContent = document.querySelector('.container-fluid.main-content');
+    if (mainContent) {
+      const userId = mainContent.getAttribute('data-student-id');
+      return userId;
+    } else {
+      console.log('El elemento .container-fluid.main-content no se encontró.');
+      return null;
+    }
+  }
+
+// Definir OcultarElementosParaProfesor
+export function HviewTeacher() {
+  const userType = obtenerTipoDeUsuario();
+  if (userType === 'teacher') {
+      document.querySelectorAll('.card-actions').forEach(function(div) {
+          div.style.display = 'none';
+      });
+      // Ocultar elementos con clase 'card-inscripcion'
+          document.querySelectorAll('.card-inscripcion').forEach(function(a) {
+          a.style.display = 'none';
+        });
+  }
+}
+
+// Definir OcultarElementosParaEstudiante
+export function HviewStudent() {
+  const userType = obtenerTipoDeUsuario();
+  if (userType === 'student') {
+      document.querySelectorAll('.card-actions').forEach(function(div) {
+          div.style.display = 'none';
+      });
+  }
+}
+// Ajustar la altura de los contenedores de las tarjetas
+export function fixDisplay() {
+  document.querySelectorAll('.card').forEach(card => {
+      card.style.height = 'auto';
+  });
+}
+
+// Simulación de una función que obtiene el ID del dueño de un curso específico
+async function obtenerDueñoDelCurso(cursoId) {
+  try {
+    const response = await fetch(`/educaWeb/apis/cursos/${cursoId}/dueno/`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+    const data = await response.json();
+    const ownerId = data.ownerId;
+    console.log(`Owner ID: ${ownerId}`); // Paso 1: Verificar el valor de ownerId
+    return ownerId;
+  } catch (error) {
+    console.error("Error al obtener el dueño del curso:", error);
+  }
+}
+
+// Implementación de esDueñoDelCurso
+export async function esDueñoDelCurso(cursoId, userId) {
+  const ownerId = await obtenerDueñoDelCurso(cursoId);
+  console.log(`Comparing ownerId (${typeof ownerId}) ${ownerId} with userId (${typeof userId}) ${userId}`); 
+  return parseInt(ownerId, 10) === parseInt(userId, 10); 
+}

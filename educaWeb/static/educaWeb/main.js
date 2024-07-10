@@ -1,4 +1,4 @@
-import { getCookie,toggleDisplay, mostrarModalLeccion, SvgIcon } from './functions.js';
+import { getCookie,toggleDisplay, mostrarModalLeccion, SvgIcon, HviewStudent, HviewTeacher, fixDisplay, obtenerTipoDeUsuario, obtenerIdUsuario, esDueñoDelCurso} from './functions.js';
 
 document.addEventListener('DOMContentLoaded', function() {
       // Ocultar elementos que no se deben mostrar al inicio
@@ -7,21 +7,39 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelector('.form-lecciones').style.display = 'none';
       document.querySelector('.container-courses').style.display = 'block';
 
+      // Delegación de eventos para botones de mostrar cursos y lecciones
+      console.log(obtenerIdUsuario())
       // Delegación de eventos para botones de crear curso, editar y mostrar lecciones
       document.body.addEventListener('click', function(event) {
         const target = event.target;
         if (target.matches('#crearCurso')) {
             toggleDisplay('.container-courses', 'none');
+            toggleDisplay('.container-maestros', 'none')
             toggleDisplay('.form-cursos', 'block');
-
+        } else if (target.matches('#misCursosMaestro')) {
+            const creadorId = target.getAttribute('data-creador-id');
+            console.log('Creador ID:', creadorId);
+            toggleDisplay('.container-courses', 'none');
+            toggleDisplay('.container-lectures', 'none');
+            toggleDisplay('.form-cursos', 'none');
+            toggleDisplay('.container-maestros', 'block');
+            ObtenerCursosPorCreador(creadorId);
         } else if (target.matches('#btn-crear-leccion')) {
             toggleDisplay('.container-lectures', 'none');
+            toggleDisplay('.container-maestros', 'none');
             toggleDisplay('.form-lecciones', 'block');
           
         } else if (target.matches('.card-button')) {
             const cursoId = target.getAttribute('data-curso-id');
+            //console.log('Curso ID:', cursoId);
+
             toggleDisplay('.container-courses', 'none');
+            toggleDisplay('.container-maestros', 'none');
+            toggleDisplay('.saved-courses', 'none');
+            toggleDisplay('.form-lecciones', 'none');
+            toggleDisplay('.form-cursos', 'none');
             toggleDisplay('.container-lectures', 'block');
+            
             ObtenerLecciones(cursoId);
         } else if (target.matches('.card-edit-button')) {
             const cursoId = target.getAttribute('data-curso-id');
@@ -29,10 +47,19 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (target.matches('.card-edit-button-leccion')) {
             const leccionId = target.getAttribute('data-leccion-id');
             FillDetailsLeccion(leccionId);
+        } else if (target.matches('.card-inscripcion')) {
+            const cursoId = target.getAttribute('data-curso-id');
+            InscribirEstudianteACurso(cursoId);
+        } else if (target.matches('#misCursosEstudiante')){
+             toggleDisplay('.container-courses', 'none');
+             toggleDisplay('.container-lectures', 'none');
+            toggleDisplay('.saved-courses', 'block');
+            ObtenerCursosInscritos();
+        
         }
     });
-
   
+
       // Agregar evento click al botón de guardar curso
       document.getElementById('btn-save').addEventListener('click', function(event) {
         event.preventDefault();
@@ -45,15 +72,26 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         const leccionId = document.querySelector('#leccionId').value;
         CrearLeccion(event,leccionId);
+        toggleDisplay('.form-lecciones', 'none');
       });
 
+    // Acceder al elemento que contiene el atributo data-tipo-usuario
+     const mainContent = document.querySelector('.container-fluid.main-content');
+      if (mainContent) {
+        const userType = mainContent.getAttribute('data-tipo-usuario');
+        console.log(userType);  
+       } else {
+        console.log('El elemento .container-fluid.main-content no se encontró.');
+       }
 
-      ObtenerCursos();
-  
+       ObtenerCursos();
+
 });
 
+// Obtener el token de seguridad CSRF
 const csrftoken = getCookie('csrftoken');
 
+// Funciones para obtener cursos y lecciones de la aplicacion web
 function ObtenerCursos() {
     document.getElementById('titulo-curso').textContent = 'Cursos';
 
@@ -63,7 +101,7 @@ function ObtenerCursos() {
       const contenedorCursos = document.querySelector('.cards');
       let htmlCursos = '';
       cursos.forEach(curso => {
-        if (curso.estado) { // Solo procesar cursos con estado true (activo)
+        if (curso.estado) { 
           htmlCursos += `
             <div class="card" tabindex="0">
               <div class="card-status-active">Activo</div>
@@ -79,9 +117,13 @@ function ObtenerCursos() {
           `;
         }
       });
-      contenedorCursos.innerHTML = htmlCursos;;
+      contenedorCursos.innerHTML = htmlCursos;
 
-
+        //Agregar roles segun vistas
+          HviewTeacher();
+          HviewStudent();
+          fixDisplay();
+    
         // Agregar evento click a los botones de borrar curso
         document.querySelectorAll('.card-delete-button').forEach(button => {
           button.addEventListener('click', function(event) {
@@ -133,7 +175,86 @@ function ObtenerCursos() {
 
   }).catch(error => console.error('Error:', error));
 }
+// Función para obtener cursos creados por un usuario determinado
+function ObtenerCursosPorCreador(creadorId) {
+  document.getElementById('titulo-curso').textContent = 'Cursos creados por mí';
 
+  fetch(`/educaWeb/apis/cursos/creador/${creadorId}`) // Ajusta la URL para filtrar por creador
+  .then(response => response.json())
+  .then(cursos => {
+    const contenedorCursos = document.querySelector('.cards-x');
+    let htmlCursos = '';
+    cursos.forEach(curso => {
+      if (curso.estado) { 
+        htmlCursos += `
+          <div class="card" tabindex="0">
+            <div class="card-status-active">Activo</div>
+            <div class="card-title">${curso.nombre}</div>
+            <div class="card-level">${curso.nivel}</div>
+            <a href="#" class="card-button" data-curso-id="${curso.id}">Entrar</a>
+            <div class="card-date">${curso.fecha_inicio}</div>
+              <div class="card-actions"> 
+                   <a href="#" class="card-edit-button" data-curso-id="${curso.id}">Editar</a>
+                   <a href="#" class="card-delete-button" data-curso-id="${curso.id}">Borrar</a>
+              </div>
+          </div>
+        `;
+      }
+    });
+    contenedorCursos.innerHTML = htmlCursos;
+
+      // Agregar evento click a los botones de borrar curso
+      document.querySelectorAll('.card-delete-button').forEach(button => {
+        button.addEventListener('click', function(event) {
+          event.preventDefault();
+          const cursoId = this.getAttribute('data-curso-id');
+      
+          Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esta acción!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, desactivar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              fetch(`/educaWeb/apis/cursos/${cursoId}/actualizar_estado/`, { 
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                  estado: false 
+                })
+              })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Error al desactivar el curso');
+                }
+                  Swal.fire({
+                    title: 'Curso desactivado',
+                    icon: "success"
+                });
+                ObtenerCursosPorCreador(creadorId); 
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                  title: "Error",
+                  text: "No se pudo desactivar el curso.",
+                  icon: "error"
+                });
+              });
+            }
+          });
+        });
+      });
+
+}).catch(error => console.error('El usuario no tiene cursos:', error));
+}
+// Función para obtener cursos inscritos por un usuario determinado
 function crearCurso(event, cursoId = null) {
   event.preventDefault();
   const submitButton = document.getElementById('btn-save');
@@ -195,7 +316,7 @@ function crearCurso(event, cursoId = null) {
     submitButton.textContent = 'Guardar';
   });
 }
-
+// Función para obtener cursos inscritos por un usuario determinado
 function FillDetailsCurso(cursoId) {
   console.log('cursoId recibido:', cursoId);
   fetch(`/educaWeb/apis/cursos/${cursoId}`) 
@@ -211,26 +332,27 @@ function FillDetailsCurso(cursoId) {
       document.querySelector('#urlImgCurso').value = curso.url_img;
       document.querySelector('#usuarioCurso').value = curso.usuario;
       
-      // Limpiar selecciones previas
+    
       const categoriasCurso = document.querySelector('#categoriasCurso');
       Array.from(categoriasCurso.options).forEach(option => option.selected = false);
       
-      // Seleccionar las categorías del curso
+     
       curso.categorias.forEach(categoria => {
         const option = categoriasCurso.querySelector(`option[value="${categoria.id}"]`);
         if (option) option.selected = true;
       });
-      // Dentro de editarCurso, después de cargar los datos
+    
         document.querySelector('#cursoId').value = cursoId;
         
       
-      // Mostrar el formulario y ocultar otros elementos
+  
+     
       document.querySelector('.form-cursos').style.display = 'block';
-      document.querySelector('.container-courses').style.display = 'none';
+      document.querySelector('.container-maestros').style.display = 'none';
+     
     })
     .catch(error => {
       console.error('Error:', error);
-      // Mensaje de error
       Swal.fire({
         title: 'Error',
         text: 'No se pudo cargar la información del curso.',
@@ -239,11 +361,29 @@ function FillDetailsCurso(cursoId) {
       });
     });
 }
-
+// Función para obtener lecciones de un curso determinado
 function ObtenerLecciones(cursoId) {
   document.getElementById('titulo-curso').textContent = 'Lecciones';
-  document.getElementById('titulo-curso').insertAdjacentHTML('beforeend', SvgIcon('plus'));
-
+  const userType = obtenerTipoDeUsuario();
+  const userId = obtenerIdUsuario();
+  
+  async function verificarYMostrarBoton(userId, cursoId) {
+    if (userType === 'teacher') {
+      const esDueño = await esDueñoDelCurso(cursoId, userId);
+      console.log(esDueño)
+      if (esDueño) {
+        const botonHTML = SvgIcon('plus');
+        const tituloCursoElement = document.getElementById('titulo-curso');
+        if (tituloCursoElement) {
+          tituloCursoElement.insertAdjacentHTML('beforeend', botonHTML);
+        } else {
+          console.error('Elemento #titulo-curso no encontrado.');
+        }
+      }
+    }
+  }
+  verificarYMostrarBoton(userId, cursoId);
+  
   fetch(`/educaWeb/apis/lecciones/por_curso/?curso=${cursoId}`) 
     .then(response => response.json())
     .then(lecciones => {
@@ -281,13 +421,17 @@ function ObtenerLecciones(cursoId) {
       htmlLecciones += '</div>';
       contenedorLecciones.innerHTML = htmlLecciones;
 
-      //recuperar curso
-      if (lecciones.length > 0) {
-        const cursoId = lecciones[0].curso;
-        document.querySelector('#cursoLeccion').value = cursoId;
-        console.log(cursoId);
-      } else { console.log("No hay lecciones o no se pudo obtener el ID del curso."); }
+      //Agregar roles
+      HviewStudent();
+      fixDisplay();
+ 
 
+   //recuperar curso
+   if (lecciones.length > 0) {
+    const cursoId = lecciones[0].curso;
+    document.querySelector('#cursoLeccion').value = cursoId;
+    console.log(cursoId);
+  } else { console.log("No hay lecciones o no se pudo obtener el ID del curso."); }
 
 
       // Evento para abrir el modal con los detalles de la lección
@@ -360,7 +504,7 @@ function ObtenerLecciones(cursoId) {
     })
     .catch(error => console.error('Error al obtener lecciones:', error));
 }
-
+// Función para obtener lecciones de un curso determinado
 function CrearLeccion(event, leccionId = null) {
   event.preventDefault();
   const submitButton = document.getElementById('btn-save-leccion');
@@ -424,15 +568,13 @@ function CrearLeccion(event, leccionId = null) {
     submitButton.textContent = 'Guardar';
   });
 }
-
+// Función para obtener lecciones de un curso determinado
 function FillDetailsLeccion(leccionId) {
-  // Validate leccionId
   if (!leccionId) {
     console.error('Invalid leccionId:', leccionId);
     return;
   }
 
-  // Fetch lesson details
   fetch(`/educaWeb/apis/lecciones/${leccionId}`)
     .then(response => {
       if (!response.ok) {
@@ -441,19 +583,17 @@ function FillDetailsLeccion(leccionId) {
       return response.json();
     })
     .then(leccion => {
-      // Update DOM elements
       document.querySelector('#nombreLeccion').value = leccion.titulo;
       document.querySelector('#urlImgLeccion').value = leccion.url_img;
       document.querySelector('#urlVideoLeccion').value = leccion.url_video;
       document.querySelector('#descripcionLeccion').value = leccion.descripcion;
       document.querySelector('#leccionId').value = leccionId;
 
-      // Show and hide elements
+
       document.querySelector('.form-lecciones').style.display = 'block';
       document.querySelector('.container-lectures').style.display = 'none';
     })
     .catch(error => {
-      // Handle errors
       console.error('Error:', error);
       Swal.fire({
         title: 'Error',
@@ -462,4 +602,81 @@ function FillDetailsLeccion(leccionId) {
         confirmButtonText: 'Cerrar'
       });
     });
+}
+// Función para inscribir un estudiante en un curso
+function InscribirEstudianteACurso(cursoId) {
+  const estudianteId = obtenerIdUsuario(); 
+  const inscripcion = {
+    curso: cursoId,
+    usuario: estudianteId
+  };
+
+  Swal.fire({
+    title: '¿Deseas guardar este guardar este curso en tu lista de cursos?',
+    icon: 'success',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, agregar!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/educaWeb/apis/inscripciones/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(inscripcion)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('No se pudo inscribir al estudiante en el curso');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Inscripción exitosa:', data);
+        // Aquí puedes agregar cualquier lógica adicional tras una inscripción exitosa, como mostrar un mensaje al usuario
+        Swal.fire({
+          title: 'Curso guardado a su lista',
+          icon: "success"
+        });
+      })
+      .catch(error =>  console.error('Error al inscribir al estudiante:', error));
+    }
+  });
+}
+
+// Función para obtener cursos inscritos por un usuario determinado
+function ObtenerCursosInscritos() {
+  document.getElementById('titulo-curso').textContent = 'Mis cursos';
+  const estudianteId = obtenerIdUsuario();
+  
+  fetch(`/educaWeb/apis/inscripciones/student_cursos/${estudianteId}/`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error en la respuesta del servidor');
+      }
+      return response.json();
+    })
+    .then(inscripciones => {
+      const contenedorCursos = document.querySelector('.cards-y');
+      let htmlCursos = '';
+      inscripciones.forEach(inscripcion => {
+          htmlCursos += `
+            <div class="card" tabindex="0">
+              <div class="card-status-active">Activo</div>
+              <div class="card-title">${inscripcion.nombre}</div>
+              <div class="card-level">${inscripcion.nivel}</div>
+              <a href="#" class="card-button" data-curso-id="${inscripcion.id}">Entrar</a>
+              <a href="#" class="card-remove" data-curso-inscripcion="${inscripcion.id}">Eliminar de mis cursos</a>
+              <div class="card-date">${inscripcion.fecha_inicio}</div>
+            </div>
+          `;
+        
+      }); 
+      contenedorCursos.innerHTML = htmlCursos;
+      console.log('Cursos actualizados');
+    })
+    .catch(error => console.error('Error al obtener cursos inscritos:', error));
 }
