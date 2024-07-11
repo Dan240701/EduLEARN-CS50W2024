@@ -4,10 +4,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.clickjacking import xframe_options_exempt
-
-
 from .models import Usuario, Curso, Leccion, Preferencias, Progreso, Categoria
 
 
@@ -45,18 +41,17 @@ def register(request):
         username = request.POST["username"]
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
-        tipo_usuario = request.POST["tipo_usuario"]  # Recupera el tipo de usuario del formulario
+        tipo_usuario = request.POST["tipo_usuario"]  
 
-        # Ensure password matches confirmation
+
         if password != confirmation:
             return render(request, "educaWeb/register.html", {
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
         try:
             user = Usuario.objects.create_user(username=username, password=password)
-            user.tipo_usuario = tipo_usuario  # Establece el tipo de usuario
+            user.tipo_usuario = tipo_usuario  
             user.save()
         except IntegrityError as e:
             print(e)
@@ -70,8 +65,6 @@ def register(request):
             'tipo_usuario': Usuario.USER_TYPE_CHOICES
         })
 
-#@xframe_options_exempt
-#Templates views
 def cursos(request):
     categorias = Categoria.objects.all()
     cursos = Curso.objects.all()
